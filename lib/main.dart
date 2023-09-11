@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        accentColor: Colors.white70
+        // accentColor: Colors.white70
       ),
       home: const SebhaScreen(),
     );
