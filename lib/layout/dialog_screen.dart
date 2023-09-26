@@ -1,42 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../modules/myprovider.dart';
+import '../modules/zikr.dart';
 
-class NewScreen extends StatefulWidget {
-  const NewScreen({Key? key}) : super(key: key);
+TextEditingController controllerText = TextEditingController();
+TextEditingController controllerGoal = TextEditingController();
 
-  @override
-  State<NewScreen> createState() => _NewScreenState();
-}
+class DialogScreen extends StatelessWidget {
+  const DialogScreen({super.key});
 
-class _NewScreenState extends State<NewScreen> {
-  TextEditingController controllerText = TextEditingController();
-  TextEditingController controllerGoel = TextEditingController();
-  List<String> listText = [];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView.separated(
-        itemBuilder: (ctx, index) => Container(
-          child: Text(listText[index]),
-        ),
-        separatorBuilder: (ctx, i) => const SizedBox(
-          height: 100,
-        ),
-        itemCount: listText.length,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAlertDialog(context);
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.teal.shade700,
-        ),
-      ),
-    );
+    return showAlertDialog(context);
   }
 
-  _showAlertDialog(BuildContext context) {
+  showAlertDialog(BuildContext context) {
+   // var pro = Provider.of<MyProvider>(context, listen: false);
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -63,7 +42,7 @@ class _NewScreenState extends State<NewScreen> {
                 ),
                 TextFormField(
                   textDirection: TextDirection.rtl,
-                  controller: controllerGoel,
+                  controller: controllerGoal,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       hintText: "0 ",
@@ -76,18 +55,24 @@ class _NewScreenState extends State<NewScreen> {
             ),
           ),
           actions: <Widget>[
-            Center(
-              child: TextButton(
-                child: const Text(
-                  'أضافة',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                onPressed: () {
-                  setState(() {
+            Consumer<MyProvider>(
+              builder: (ct, value, child) => Center(
+                child: TextButton(
+                  child: const Text(
+                    'أضافة',
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                  onPressed: () async {
                     Navigator.of(context).pop();
-                    listText.add(controllerText.text);
-                  });
-                },
+                    value.zikrModel = Zikr(
+                        name: controllerText.text,
+                        count: int.parse(controllerGoal.text),
+                        clicked: 0);
+                    value.zikr.insert(value.zikrModel);
+                    value.listText = await value.zikr.retrieve();
+                    value.notifyListeners();
+                  },
+                ),
               ),
             ),
           ],

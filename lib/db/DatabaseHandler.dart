@@ -1,3 +1,6 @@
+
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -8,9 +11,11 @@ class DatabaseHandler {
       join(path, 'dgi.db'),
       onCreate: (database, version) async {
         Batch batch = database.batch();
-        batch.execute("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, job TEXT, salary TEXT, isDeleted INTEGER)",);
-        batch.execute("CREATE TABLE attendance(id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, todayDate TEXT, weekId INTEGER, status INTEGER, weekStatus INTEGER,overTimeStatus INTEGER, salaryReceived TEXT,salary TEXT,workPlace TEXT,weekEnd TEXT)",);
-        batch.execute("CREATE TABLE notes(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, dateCreated TEXT, color INTEGER)",);
+        batch.execute(
+          "CREATE TABLE zikr(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, count INTEGER, clicked INTEGER)",
+        );
+        //batch.execute("CREATE TABLE attendance(id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, todayDate TEXT, weekId INTEGER, status INTEGER, weekStatus INTEGER,overTimeStatus INTEGER, salaryReceived TEXT,salary TEXT,workPlace TEXT,weekEnd TEXT)",);
+        //batch.execute("CREATE TABLE notes(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, dateCreated TEXT, color INTEGER)",);
         await batch.commit();
       },
       version: 1,
@@ -23,5 +28,4 @@ class DatabaseHandler {
     batch.execute("delete from users");
     return await batch.commit();
   }
-
 }

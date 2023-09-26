@@ -1,9 +1,16 @@
+import 'package:e_sebha/modules/myprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'layout/sebha/sebha_layout.dart';
+import 'layout/sebha_layout.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_)=> MyProvider(),
+      builder: (ctx, child) => const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,11 +21,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      themeMode: Provider.of<MyProvider>(context).tm,
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        // accentColor: Colors.white70
+        primarySwatch: Colors.blue,
       ),
-      home: const SebhaScreen(),
+      darkTheme: ThemeData(
+          primaryColor: Colors.black),
+      home:const SebhaScreen(),
     );
   }
 }
